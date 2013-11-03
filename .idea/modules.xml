@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/DefineYourDayApp/DefineYourDayApp.iml" filepath="$PROJECT_DIR$/DefineYourDayApp/DefineYourDayApp.iml" />
+      <module fileurl="file://$PROJECT_DIR$/DefineYourDayAppProject.iml" filepath="$PROJECT_DIR$/DefineYourDayAppProject.iml" />
+    </modules>
+  </component>
+</project>
+
