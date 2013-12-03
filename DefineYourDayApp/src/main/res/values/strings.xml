@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="app_name">DefineYourDayApp</string>
-    <string name="hello_world">Hello world!</string>
+    <string name="app_name">Define my days</string>
+    <string name="define_status">Your day in a few words?</string>
     <string name="action_settings">Settings</string>
+    <string name="edit_message">my status</string>
+    <string name="button_send">Save</string>
 
 </resources>
