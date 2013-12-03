@@ -9,8 +9,44 @@
     tools:context=".MainActivity$PlaceholderFragment">
 
     <TextView
-        android:text="@string/hello_world"
-        android:layout_width="wrap_content"
+        android:id="@+id/hint"
+        android:text="@string/define_status"
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content" />
+
+    <LinearLayout
+        android:id="@+id/layout"
+        android:layout_width="match_parent"
+        android:layout_height="80dp"
+        android:layout_below="@id/hint">
+
+
+        <EditText
+            android:id="@+id/input"
+            style="@style/textInput"
+            android:layout_height="wrap_content"
+            android:layout_width="fill_parent" />
+
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/sendMessage"
+        android:text="@string/button_send"
+        android:layout_below="@id/layout"
+        android:onClick="saveNumber"
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content" />
 
+    <LinearLayout
+        android:id="@+id/layou2t"
+        android:layout_width="match_parent"
+        android:layout_height="80dp"
+        android:layout_below="@id/sendMessage">
+
+
+        <TextView
+            android:id="@+id/list"
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content" />
+    </LinearLayout>
 </RelativeLayout>
