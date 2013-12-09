@@ -1,21 +1,21 @@
 package com.laurinka.defineYourDay.app;
 
 import android.content.SharedPreferences;
-import android.support.v7.app.ActionBarActivity;
-import android.support.v7.app.ActionBar;
-import android.support.v4.app.Fragment;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.support.v7.app.ActionBarActivity;
+import android.text.Editable;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.os.Build;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
 import java.text.DateFormat;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -36,12 +36,21 @@ public class MainActivity extends ActionBarActivity {
         }
         sharedPreferences = getSharedPreferences("com.laurinka.defineYourDay",
                 MODE_PRIVATE);
+        updateText();
     }
 
+    /**
+     * Fills old statuses when started.
+     */
+    @Override
+    protected void onResume() {
+        super.onResume();
+        updateText();
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        
+
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.main, menu);
         return true;
@@ -59,45 +68,89 @@ public class MainActivity extends ActionBarActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    /**
+     * Saves number into shared preferences
+     * and update list of statuses accordingly.
+     * @param view
+     */
     public void saveNumber(View view) {
-        boolean commit = sharedPreferences.edit().putString(getCurrentDate(), findNumber()).commit();
+        String currentDate = getCurrentDate();
+        String status = findStatus();
+        Log.i(this.getLocalClassName(), currentDate + ":" + status);
+        boolean commit = sharedPreferences.edit().putString(currentDate, status).commit();
         if (!commit) {
             throw new IllegalStateException("wtf!");
         }
         updateText();
+        clearStatus();
+        findSaveButton().requestFocus();
     }
-
-    static SimpleDateFormat sdf = new SimpleDateFormat("yyyymmdd");
+    // use 20131224 format
+    static SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
 
     static protected String getCurrentDate() {
         Date date = new Date();
         return sdf.format(date);
     }
-    protected String findNumber() {
+
+    /**
+     * Clears status after saving.
+     */
+    protected void clearStatus() {
         EditText editText = findEditText();
-        return editText.getText().toString();
+        editText.setText("");
     }
 
+    /**
+     * Finds status.
+     * @return
+     */
+    protected String findStatus() {
+        EditText editText = findEditText();
+        Editable text = editText.getText();
+        if (null == text) {
+            return "";
+        }
+        return text.toString();
+    }
+
+    /**
+     * Concatenate last 5 statuses and displays them.
+     */
     protected void updateText() {
         DateFormat nice = DateFormat.getDateInstance();
-        Date today;
         Calendar instance = Calendar.getInstance();
         instance.setTime(new Date());
-        StringBuffer sb = new StringBuffer();
+        StringBuilder sb = new StringBuilder();
         for (int i = 0; i < 5; i++) {
             Date tmpDate = instance.getTime();
             String format = sdf.format(tmpDate);
+
+           Log.i(this.getLocalClassName(), "Asking..." + format);
             String string = sharedPreferences.getString(format, "Day sucked!");
-            sb.append(nice.format(tmpDate) + ": "  + string);
+            sb.append(nice.format(tmpDate));
+            sb.append(": ");
+            sb.append(string);
             sb.append("\n");
             instance.add(Calendar.DAY_OF_YEAR, -1);
         }
         TextView list = (TextView) findViewById(R.id.list);
-        list.setText(sb.toString());
+        if (null != list) {
+            list.setText(sb.toString());
+        }
+    }
+
+    /**
+     * Finds save button.
+     * @return
+     */
+    protected Button findSaveButton() {
+        return (Button) findViewById(R.id.sendMessage);
     }
     protected EditText findEditText() {
         return (EditText) findViewById(R.id.input);
     }
+
     /**
      * A placeholder fragment containing a simple view.
      */
@@ -108,7 +161,7 @@ public class MainActivity extends ActionBarActivity {
 
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                Bundle savedInstanceState) {
+                                 Bundle savedInstanceState) {
             View rootView = inflater.inflate(R.layout.fragment_main, container, false);
             return rootView;
         }
