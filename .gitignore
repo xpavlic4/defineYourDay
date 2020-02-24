@@ -4,3 +4,7 @@
 .DS_Store
 .idea/
 *.iml
+vcs.xml
+modules.xml
+misc.xml
+gradle.xml
